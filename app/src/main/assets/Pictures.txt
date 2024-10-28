@@ -1,0 +1,6 @@
+1|Vincent van Gogh|La noche estrelladal|image001.png|1|9.7|8.5|Descripcion
+2|Johannes Vermeer|La joven de la perla|image002.png|1|7.5|9.7|Descripcion
+3|Leonardo da Vinci|La Gioconda|image003.png|2|1.3|8.5|Descripcion
+4|Diego Velázquez|Las meninas|image004.png|2|2.5|9.7|Descripcion
+5|Leonardo da Vinci|La última cenal|image005.png|3|1.3|4|Descrpcion
+6|Caspar David Friedric|Monje en la orilla|image006.png|3|3.7|5.5|Descrpcion
