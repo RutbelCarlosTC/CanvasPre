@@ -70,13 +70,16 @@ RoomView extends View {
 
         layout_height = layout_height.replace("dip",  "");
         layout_width = layout_width.replace("dip",  "");
+
         float density = getResources().getDisplayMetrics().density;
         HEIGHT = density * Float.parseFloat(layout_height);
         WIDTH = density * Float.parseFloat(layout_width);
-        Log.d(TAG, "Dimension:" + WIDTH + "x" + HEIGHT);
-        region = new Region();
-        HashMap<Object, Object> pictureRegionList = new HashMap<>();
 
+        Log.d(TAG, "Dimension:" + WIDTH + "x" + HEIGHT);
+
+        region = new Region();
+
+        pictureRegionList = new HashMap<>();
 
         picturePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         picturePaint.setColor(Color.parseColor( "#ff9880"));
@@ -97,6 +100,7 @@ RoomView extends View {
     }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
         float pointX = event.getX();
         float pointY = event.getY();
 
@@ -131,11 +135,14 @@ RoomView extends View {
         List<VertexEntity> vertexEntityList =  roomAndVertex.vertexEntityList;
         Path path =  new Path();
         path.moveTo(vertexEntityList.get(0).getX(), vertexEntityList.get(0).getY());
+
         for (int i=1; i < vertexEntityList.size(); i++) {
             path.lineTo(vertexEntityList.get(i).getX(), vertexEntityList.get(i).getY());
         }
         path.close();
-        region.setPath(path, new Region( 8,  8, (int) WIDTH, (int) HEIGHT)); canvas.drawPath(path, paint);
+
+        region.setPath(path, new Region( 0,  0, (int) WIDTH, (int) HEIGHT));
+        canvas.drawPath(path, paint);
         drawRoomTitle(canvas, roomAndVertex.roomEntity.label, region);
     }
 
@@ -150,10 +157,10 @@ RoomView extends View {
             int _y = (int) picture.y;
 
             Path path = new Path();
-            path.addCircle(_x, _y,  68f, Path.Direction.CW);
+            path.addCircle(_x, _y,68f, Path.Direction.CW);
             canvas.drawPath(path, picturePaint);
             Region region = new Region();
-            region.setPath(path, new Region( 0,  8, (int) WIDTH, (int) HEIGHT));
+            region.setPath(path, new Region( 0,  0, (int) WIDTH, (int) HEIGHT));
             pictureRegionList.put(picture, region);
             canvas.drawText( ""+ picture.pictureId, _x, _y, pictureIconTextPaint);
         }
@@ -191,7 +198,7 @@ RoomView extends View {
         if (roomAndVertex.vertexEntityList == null) return null;
         int leftX = (int) WIDTH;
         int topY =  (int) HEIGHT;
-        int rightX = 8;
+        int rightX = 0;
         int bottomY = 0;
 
         for (VertexEntity vertex :roomAndVertex.vertexEntityList) {
@@ -228,7 +235,8 @@ RoomView extends View {
         params.put("OFFSET_X", offsetX);
         params.put("OFFSET_Y", offsetY);
         params.put("MARGIN_LEFT", marginLeft);
-        params.put("MARGIN TOP", 80f);
+        params.put("MARGIN_TOP", 80f);
+
 
         return params;
     }
@@ -240,7 +248,7 @@ RoomView extends View {
             float scale = (float) parameters.get("SCALE");
             float offsetX = (float) parameters.get("OFFSET_X");
             float offsetY = (float) parameters.get("OFFSET_Y");
-            float marginLeft = (float) parameters.get("MARGIN-LEFT");
+            float marginLeft = (float) parameters.get("MARGIN_LEFT");
             float marginTop =  (float) parameters.get("MARGIN_TOP");
 
             this.roomAndVertex.vertexEntityList.forEach(obj -> {
@@ -258,7 +266,7 @@ RoomView extends View {
             float offsetX = (float) parameters.get("OFFSET_X");
             float offsetY = (float) parameters.get("OFFSET_Y");
             float marginLeft = (float) parameters.get("MARGIN_LEFT");
-            float marginTop = (float) parameters.get("MARGIN TOP");
+            float marginTop = (float) parameters.get("MARGIN_TOP");
 
             this.pictureEntityList.forEach(obj -> {
                 Log.d("TAG", "original:" + "->" + obj.x + "," + obj.y);
@@ -276,8 +284,8 @@ RoomView extends View {
             float scale  = (float) parameters.get("SCALE");
             float offsetX = (float) parameters.get("OFFSET_X");
             float offsetY = (float) parameters.get("OFFSET_Y");
-            float marginLeft = (float) parameters.get("MARGIN LEFT");
-            float marginTop = (float) parameters.get("MARGIN TOP");
+            float marginLeft = (float) parameters.get("MARGIN_LEFT");
+            float marginTop = (float) parameters.get("MARGIN_TOP");
             this.doorEntityList.forEach(obj -> {
                 obj.setX((scale * obj.getX()) - offsetX + marginLeft);
                 obj.setY((scale * obj.getY()) - offsetY + marginTop);
@@ -290,6 +298,10 @@ RoomView extends View {
 
     public void setEventViewModel(EventViewModel eventViewModel) {
         this.eventViewModel = eventViewModel;
+    }
+
+    public HashMap<String, Float> getParameters(){
+        return parameters;
     }
 
 

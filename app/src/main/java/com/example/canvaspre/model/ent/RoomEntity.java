@@ -1,25 +1,31 @@
 package com.example.canvaspre.model.ent;
-
-import android.graphics.Point;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import java.util.List;
+
 @Entity(tableName = "rooms")
 public class RoomEntity {
-    @PrimaryKey
-    public int roomId;
+    @PrimaryKey(autoGenerate = true)
+    private int roomId;    // Identificador único de la sala
 
-    private String name;
-    public String label;
-    private List<Point> vertices;
+    public String label;   // Nombre de la sala
 
-    public RoomEntity(String name, List<Point> vertices) {
-        this.name = name;
-        this.vertices = vertices;
+    // Constructor
+    public RoomEntity(int roomId, String label) {
+        this.roomId = roomId;
+        this.label = label;
     }
 
-    public String getName() { return name; }
-    public List<Point> getVertices() { return vertices; }
+    // Getters y setters
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 }

@@ -18,17 +18,26 @@ import java.util.List;
 public class FileRepository {
     private Context context;
 
-    public List<PictureEntity> getImages(String filename) {
+    // Constructor que recibe un Context
+    public FileRepository(Context context) {
+        this.context = context;
+    }
+
+    // Método para leer Rooms.txt y obtener una lista de RoomEntity
+    public List<RoomEntity> getRooms(String filename) {
         BufferedReader reader = null;
-        List<PictureEntity> images = new ArrayList<>();
+        List<RoomEntity> rooms = new ArrayList<>();
         try {
-            reader = new BufferedReader(
-                    new InputStreamReader(context.getAssets().open(filename)));
+            reader = new BufferedReader(new InputStreamReader(context.getAssets().open(filename)));
             String line;
+
             while ((line = reader.readLine()) != null) {
-                String[] cols = line.split(",");
-                PictureEntity pictureEntity = new PictureEntity();
-                images.add(pictureEntity);
+                String[] data = line.split(",");
+                RoomEntity roomEntity = new RoomEntity(
+                        Integer.parseInt(data[0].trim()), // Room ID
+                        data[1].trim()                    // Nombre de la sala
+                );
+                rooms.add(roomEntity);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,8 +50,53 @@ public class FileRepository {
                 }
             }
         }
+        return rooms;
+    }
+
+    public List<PictureEntity> getImages(String filename) {
+    BufferedReader reader = null;
+    List<PictureEntity> images = new ArrayList<>();
+    try {
+        // Abre el archivo desde los recursos de assets
+        reader = new BufferedReader(
+                new InputStreamReader(context.getAssets().open(filename)));
+        String line;
+
+        // Lee cada línea del archivo
+        while ((line = reader.readLine()) != null) {
+            // Divide la línea por el carácter "|"
+            String[] data = line.split("\\|");
+
+            // Crea un objeto PictureEntity con los datos correspondientes
+            PictureEntity pictureEntity = new PictureEntity(
+                    data[2],                        // Título de la imagen
+                    data[1],                        // Autor
+                    data[3],                        // Nombre del archivo de imagen
+                    Integer.parseInt(data[4]),      // roomId
+                    Float.parseFloat(data[5]),      // Coordenada X
+                    Float.parseFloat(data[6]),      // Coordenada Y
+                    data[7]                         // Descripción
+            );
+
+            // Agrega el objeto a la lista
+            images.add(pictureEntity);
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        // Cierra el reader
+        if (reader != null) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
         return images;
     }
+
 
     public List<VertexEntity> getVertexes(String[] filenames) {
         BufferedReader reader = null;
@@ -56,10 +110,10 @@ public class FileRepository {
                 while ((line = reader.readLine()) != null) {
                     String[] vertex = line.split(",");
                     VertexEntity vertexEntity = new VertexEntity(
-                            Integer.parseInt(vertex[8]),
-                            Integer.parseInt(vertex[1]),
-                            Float.parseFloat(vertex[2]),
-                            Float.parseFloat(vertex[3])
+                            Integer.parseInt(vertex[0]), // Vertex ID
+                            Integer.parseInt(vertex[1]), // Room ID
+                            Float.parseFloat(vertex[2]), // Coordenada X
+                            Float.parseFloat(vertex[3])  // Coordenada Y
                     );
                     vertexEntityList.add(vertexEntity);
                 }

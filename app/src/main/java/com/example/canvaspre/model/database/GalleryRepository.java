@@ -42,6 +42,7 @@ public class GalleryRepository {
         return appDatabase.doorDao().getAll();
     }
 
+
     public List<PictureEntity> getPicturesByRoomId(int roomId) {
         return appDatabase.pictureDao().getPicturesByRoomId(roomId);
     }
@@ -50,4 +51,21 @@ public class GalleryRepository {
         Log.d( "TAG", "GalleryRepository pictureld: "+pictureId);
         return appDatabase.pictureDao().getPictureById(pictureId);
     }
+
+    public void addPictures (List<PictureEntity> pictureEntityList) {
+        appDatabase.pictureDao().insert(pictureEntityList);
+    }
+
+    public void addDoors (List<DoorEntity> doorEntityList) {
+        appDatabase.doorDao().insert(doorEntityList);
+    }
+
+    public void addRooms(List<RoomEntity> roomEntityList){
+        appDatabase.roomVertexDao().insert(roomEntityList);
+    }
+
+    public void addVertexes(List<VertexEntity> vertexEntityList){
+        appDatabase.vertexDao().insert(vertexEntityList);
+    }
+
 }

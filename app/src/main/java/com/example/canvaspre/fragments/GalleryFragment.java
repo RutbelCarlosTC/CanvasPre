@@ -2,65 +2,74 @@ package com.example.canvaspre.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.example.canvaspre.R;
+import com.example.canvaspre.canvas.GalleryView;
+import com.example.canvaspre.controller.EventViewModel;
+import com.example.canvaspre.model.database.AppDataBase;
+import com.example.canvaspre.model.database.ExecuteTask;
+import com.example.canvaspre.model.database.GalleryRepository;
+import com.example.canvaspre.model.ent.RoomAndVertex;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GalleryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GalleryFragment extends Fragment {
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class GalleryFragment extends Fragment implements  GalleryFragmentListener{
+
+    private GalleryRepository repository;
+    private EventViewModel eventViewModel;
+    private GalleryView galleryView;
+    private final GalleryFragmentListener galleryFragmentListener = this;
 
     public GalleryFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GalleryFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GalleryFragment newInstance(String param1, String param2) {
-        GalleryFragment fragment = new GalleryFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        // Constructor vacío requerido
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Infla el layout del fragmento
         return inflater.inflate(R.layout.fragment_gallery, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Inicializa el ViewModel y el repositorio
+        eventViewModel = new ViewModelProvider(requireActivity()).get(EventViewModel.class);
+        repository = new GalleryRepository(AppDataBase.getInstance(requireContext()));
+
+        // Referencia a la vista personalizada de la galería
+        galleryView = view.findViewById(R.id.galleryview);
+        galleryView.setEventViewModel(eventViewModel);
+
+        // Cargar datos de las habitaciones
+        loadRoomsWithVertices();
+    }
+
+    private void loadRoomsWithVertices() {
+        ExecuteTask executeTask = new ExecuteTask();
+        executeTask.asyncTask(() -> galleryFragmentListener.onResultRoomVertices(repository.getRoomWithVertexes()));
+    }
+
+    @Override
+    public void onRoomSelected(int roomId) {
+
+    }
+
+    @Override
+    public void onResultRoomVertices(List<RoomAndVertex> data) {
+        if (galleryView != null) {
+            galleryView.setRooms(data); // Asigna la lista de habitaciones para dibujar
+        }
     }
 }

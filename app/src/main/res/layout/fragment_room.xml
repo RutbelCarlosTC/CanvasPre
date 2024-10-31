@@ -8,7 +8,7 @@
 
     <com.example.canvaspre.canvas.RoomView
         android:id="@+id/roomview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="410dp"
+        android:layout_height="640dp" />
 
 </FrameLayout>

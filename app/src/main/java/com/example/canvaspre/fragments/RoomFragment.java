@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,19 @@ public class RoomFragment extends Fragment implements RoomFragmentListener{
         ExecuteTask executeTask =  new ExecuteTask();
         executeTask.asyncTask(() ->
                 roomFragmentListener.onResultRoomVertex(repository.getRoomWithVertexByRoomId(roomId) ));
+
+
+    }
+
+    @Override
+    public void onResultRoomVertex(RoomAndVertex data) {
+        if (roomView != null) {
+            Log.d("DATA RECIBIDA ROOMANDVERTEX", data.vertexEntityList.toString());
+            roomView.setRoom(data);
+            Log.d("ROOOM FRAG, PARAMET",roomView.getParameters().toString());
+            loadPictures(roomIdParam);
+            loadDoors();
+        }
     }
 
     private void loadPictures(int roomId){
@@ -94,14 +108,7 @@ public class RoomFragment extends Fragment implements RoomFragmentListener{
                 roomFragmentListener.onResultDoors(repository.getDoors() ));
     }
 
-    @Override
-    public void onResultRoomVertex(RoomAndVertex data) {
-        if(roomView != null){
-                roomView.setRoom(data);
-            loadPictures(roomIdParam);
-            loadDoors();
-        }
-    }
+
 
     @Override
     public void onResultPicture(List<PictureEntity> data) {

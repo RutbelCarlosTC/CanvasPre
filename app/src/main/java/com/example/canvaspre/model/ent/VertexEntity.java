@@ -26,6 +26,9 @@ public class VertexEntity {
     }
 
     // Métodos getter
+    public int getId() {
+        return id;
+    }
     public float getX() {
         return x;
     }

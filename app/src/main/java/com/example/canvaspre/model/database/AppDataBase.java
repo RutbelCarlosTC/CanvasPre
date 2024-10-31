@@ -37,6 +37,8 @@ public abstract class AppDataBase extends RoomDatabase {
 
         public abstract VertexDao vertexDao();
 
+        //public abstract RoomDao roomDao();
+
         private static AppDataBase INSTANCE = null;
 
         public static AppDataBase getInstance(Context context){

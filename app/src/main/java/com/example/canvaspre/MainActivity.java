@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProvider;
 
-
 import com.example.canvaspre.canvas.RoomView;
 import com.example.canvaspre.controller.EventViewModel;
 import com.example.canvaspre.fragments.GalleryFragment;
@@ -96,8 +95,10 @@ public class MainActivity extends AppCompatActivity {
                 loadFragment(homeFragment);
                 return true;
             } else if (item.getItemId() == R.id.menu_map_room) {
-                galleryFragment = GalleryFragment.newInstance("", "");
-                loadFragment(galleryFragment);
+                //galleryFragment = new GalleryFragment();
+                //loadFragment(galleryFragment);
+                roomFragment = RoomFragment.newInstance(2);
+                loadFragment(roomFragment);
                 return true;
             } else {
                 return false;
@@ -131,7 +132,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Gallery fragment not found");
         }
     }
-
 
 }
 

@@ -14,15 +14,28 @@ public class PictureEntity {
     public int pictureId;
 
     public String title;
-    public float x;
-    public float y;
-    public int roomId; // ID de la habitación a la que pertenece la imagen
 
-    public PictureEntity(String title, float x, float y, int roomId) {
+    public String author;
+
+    public String imageFile;
+
+    public int roomId;
+
+    public float x;
+
+    public float y;
+
+    public String description;
+
+    // Constructor
+    public PictureEntity(String title, String author, String imageFile, int roomId, float x, float y, String description) {
         this.title = title;
+        this.author = author;
+        this.imageFile = imageFile;
+        this.roomId = roomId;
         this.x = x;
         this.y = y;
-        this.roomId = roomId; // Asigna el roomId en el constructor
+        this.description = description;
     }
 
 }
